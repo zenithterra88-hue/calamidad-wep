@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUPREME CALAMITAS | INFERNUM MODE</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif}
+body{min-height:100vh;background:black;overflow:hidden;color:#ffdede}
+
+/* INTRO */
+#intro{position:fixed;inset:0;background:black;display:flex;justify-content:center;align-items:center;z-index:10;animation:introFade 5s forwards}
+#intro h1{font-size:42px;color:#ff3b3b;text-shadow:0 0 40px red;letter-spacing:6px}
+@keyframes introFade{0%{opacity:1}70%{opacity:1}100%{opacity:0;pointer-events:none}}
+
+canvas{position:fixed;inset:0;z-index:0}
+
+.card{position:relative;z-index:2;width:450px;padding:55px 40px;text-align:center;border-radius:35px;background:linear-gradient(180deg,rgba(160,0,0,.5),rgba(10,0,0,.98));border:2px solid rgba(255,80,80,.6);box-shadow:0 0 120px rgba(255,60,60,.9);animation:inferno 2s infinite alternate}
+@keyframes inferno{from{box-shadow:0 0 50px rgba(255,80,80,.4)}to{box-shadow:0 0 130px rgba(255,120,120,1)}}
+
+.logo{width:150px;height:150px;border-radius:50%;border:4px solid #ff4d4d;box-shadow:0 0 45px rgba(255,90,90,1);margin-bottom:25px}
+
+h1{font-size:38px;letter-spacing:5px;color:#ffb3b3;text-shadow:0 0 35px rgba(255,90,90,1)}
+.subtitle{font-size:14px;margin:20px 0 40px;opacity:.9}
+
+.features{text-align:left;margin-bottom:40px}
+.features li{list-style:none;margin:15px 0;font-size:13px}
+.features li::before{content:"✹";color:#ff5c5c;margin-right:12px}
+
+.btn{display:inline-block;padding:18px 45px;border-radius:70px;background:linear-gradient(90deg,#ff1a1a,#ff9a9a);color:#1a0000;text-decoration:none;font-weight:900;letter-spacing:4px;box-shadow:0 0 70px rgba(255,120,120,1);transition:.25s}
+.btn:hover{transform:scale(1.18);box-shadow:0 0 120px rgba(255,200,200,1)}
+
+.music{margin-top:35px;font-size:12px;cursor:pointer;opacity:.8}
+footer{margin-top:35px;font-size:11px;opacity:.6}
+@media(max-width:520px){.card{width:94%}}
+</style>
+</head>
+<body>
+
+<div id="intro"><h1>SUPREME CALAMITAS</h1></div>
+<canvas id="fx"></canvas>
+
+<div class="card">
+<img src="/mnt/data/4F_SBw8-ptCVOTuK5Y26t1z4q1GvYt3Ce0hDZ5QDvK4.webp" class="logo">
+<h1>SUPREME CALAMITAS</h1>
+<div class="subtitle">INFERNUM MODE · FINAL JUDGMENT</div>
+<ul class="features">
+<li>Modo Infernum activado</li>
+<li>Eventos imposibles</li>
+<li>Progresión extrema</li>
+<li>Solo los dignos sobreviven</li>
+</ul>
+<a href="https://discord.gg/KCEff3pDbY" target="_blank" class="btn">ENFRENTAR EL INFIERNO</a>
+<div class="music" onclick="toggleMusic()">🔥 Música Infernum ON / OFF</div>
+<footer>© 2025 · Infernum Calamitas</footer>
+</div>
+
+<audio id="bgm" loop><source src="https://files.catbox.moe/9gqf0g.mp3" type="audio/mpeg"></audio>
+<script>
+const music=document.getElementById('bgm');let p=false;function toggleMusic(){p?music.pause():music.play();p=!p}
+const c=document.getElementById('fx'),x=c.getContext('2d');let w,h,pt=[];
+function r(){w=c.width=innerWidth;h=c.height=innerHeight}addEventListener('resize',r);r();
+for(let i=0;i<180;i++)pt.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*2+1,s:Math.random()*1.5+0.6});
+function a(){x.clearRect(0,0,w,h);x.fillStyle='rgba(255,80,80,.9)';pt.forEach(e=>{x.beginPath();x.arc(e.x,e.y,e.r,0,6.28);x.fill();e.y+=e.s;if(e.y>h)e.y=0});requestAnimationFrame(a)}a();
+</script>
+</body>
+</html>
