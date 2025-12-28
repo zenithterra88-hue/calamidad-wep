@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SUPREME CALAMITAS | INFERNUM MODE</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif}
 body{min-height:100vh;background:black;overflow:hidden;color:#ffdede}
 
-/* INTRO */
 #intro{position:fixed;inset:0;background:black;display:flex;justify-content:center;align-items:center;z-index:10;animation:introFade 5s forwards}
 #intro h1{font-size:42px;color:#ff3b3b;text-shadow:0 0 40px red;letter-spacing:6px}
 @keyframes introFade{0%{opacity:1}70%{opacity:1}100%{opacity:0;pointer-events:none}}
@@ -33,36 +33,137 @@ h1{font-size:38px;letter-spacing:5px;color:#ffb3b3;text-shadow:0 0 35px rgba(255
 
 .music{margin-top:35px;font-size:12px;cursor:pointer;opacity:.8}
 footer{margin-top:35px;font-size:11px;opacity:.6}
-@media(max-width:520px){.card{width:94%}}
+
+/* AUTH */
+#authMenu{
+  position:fixed;inset:0;
+  background:radial-gradient(circle at center,#220000,#000);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  z-index:60;text-align:center
+}
+.tabs{margin-bottom:30px}
+.tabs span{
+  margin:0 15px;cursor:pointer;
+  letter-spacing:3px;font-size:13px;
+  opacity:.6
+}
+.tabs .active{opacity:1;color:#ff3b3b;text-shadow:0 0 15px red}
+
+#authMenu input{
+  width:260px;padding:14px;margin:10px;border:none;border-radius:25px;
+  background:#100;color:#ffdede;text-align:center;
+  box-shadow:0 0 20px rgba(255,60,60,.6)
+}
+#authMenu button{
+  margin-top:20px;padding:15px 40px;border:none;border-radius:40px;
+  background:linear-gradient(90deg,#ff1a1a,#ff9a9a);
+  font-weight:900;letter-spacing:3px;cursor:pointer;
+  box-shadow:0 0 50px rgba(255,80,80,1);transition:.25s
+}
+#authMenu button:hover{transform:scale(1.15)}
+#msg{margin-top:15px;font-size:12px;color:#ffb3b3}
+
 </style>
 </head>
+
 <body>
+
+<div id="authMenu">
+  <h2>INFERNUM ACCESS</h2>
+  <p class="sub">PROTOCOLO DE AUTENTICACIÓN</p>
+
+  <div class="tabs">
+    <span id="tabLogin" class="active" onclick="showLogin()">LOGIN</span>
+    <span id="tabRegister" onclick="showRegister()">REGISTRO</span>
+  </div>
+
+  <div id="loginBox">
+    <input id="loginUser" placeholder="Usuario">
+    <input id="loginPass" type="password" placeholder="Clave">
+    <button onclick="login()">ENTRAR</button>
+  </div>
+
+  <div id="registerBox" style="display:none">
+    <input id="regUser" placeholder="Nuevo usuario">
+    <input id="regEmail" placeholder="Correo">
+    <input id="regPass" type="password" placeholder="Clave">
+    <button onclick="register()">CREAR CUENTA</button>
+  </div>
+
+  <p id="msg"></p>
+</div>
 
 <div id="intro"><h1>SUPREME CALAMITAS</h1></div>
 <canvas id="fx"></canvas>
 
 <div class="card">
-<img src="/mnt/data/4F_SBw8-ptCVOTuK5Y26t1z4q1GvYt3Ce0hDZ5QDvK4.webp" class="logo">
+<img src="logo.webp" class="logo">
 <h1>SUPREME CALAMITAS</h1>
 <div class="subtitle">INFERNUM MODE · FINAL JUDGMENT</div>
+
 <ul class="features">
 <li>Modo Infernum activado</li>
 <li>Eventos imposibles</li>
 <li>Progresión extrema</li>
 <li>Solo los dignos sobreviven</li>
 </ul>
-<a href="https://discord.gg/KCEff3pDbY" target="_blank" class="btn">ENFRENTAR EL INFIERNO</a>
+
+<a href="downloads/Client.zip" class="btn">DESCARGAR CLIENTE</a>
 <div class="music" onclick="toggleMusic()">🔥 Música Infernum ON / OFF</div>
 <footer>© 2025 · Infernum Calamitas</footer>
 </div>
 
-<audio id="bgm" loop><source src="https://files.catbox.moe/9gqf0g.mp3" type="audio/mpeg"></audio>
+<audio id="bgm" loop>
+<source src="music.mp3" type="audio/mpeg">
+</audio>
+
 <script>
-const music=document.getElementById('bgm');let p=false;function toggleMusic(){p?music.pause():music.play();p=!p}
-const c=document.getElementById('fx'),x=c.getContext('2d');let w,h,pt=[];
+const music=document.getElementById('bgm');let p=false;
+function toggleMusic(){p?music.pause():music.play();p=!p}
+
+function showLogin(){
+  loginBox.style.display="block";
+  registerBox.style.display="none";
+  tabLogin.classList.add("active");
+  tabRegister.classList.remove("active");
+  msg.innerText="";
+}
+function showRegister(){
+  loginBox.style.display="none";
+  registerBox.style.display="block";
+  tabRegister.classList.add("active");
+  tabLogin.classList.remove("active");
+  msg.innerText="";
+}
+function register(){
+  const u=regUser.value,e=regEmail.value,pw=regPass.value;
+  if(!u||!e||!pw){msg.innerText="Completa todo";return}
+  localStorage.setItem("infernumUser",JSON.stringify({u,p:pw}));
+  msg.innerText="Cuenta creada. Ahora inicia sesión.";
+  showLogin();
+}
+function login(){
+  const data=JSON.parse(localStorage.getItem("infernumUser"));
+  if(!data){msg.innerText="No existe cuenta";return}
+  if(loginUser.value===data.u && loginPass.value===data.p){
+    msg.innerText="Acceso concedido";
+    setTimeout(()=>authMenu.style.display="none",800);
+  }else msg.innerText="Datos incorrectos";
+}
+
+const c=fx,x=c.getContext('2d');let w,h,pt=[];
 function r(){w=c.width=innerWidth;h=c.height=innerHeight}addEventListener('resize',r);r();
-for(let i=0;i<180;i++)pt.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*2+1,s:Math.random()*1.5+0.6});
-function a(){x.clearRect(0,0,w,h);x.fillStyle='rgba(255,80,80,.9)';pt.forEach(e=>{x.beginPath();x.arc(e.x,e.y,e.r,0,6.28);x.fill();e.y+=e.s;if(e.y>h)e.y=0});requestAnimationFrame(a)}a();
+for(let i=0;i<160;i++)pt.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*2+1,s:Math.random()*1.5+.6});
+(function a(){
+  x.clearRect(0,0,w,h);x.fillStyle='rgba(255,80,80,.9)';
+  for(const e of pt){x.beginPath();x.arc(e.x,e.y,e.r,0,6.28);x.fill();e.y+=e.s;if(e.y>h)e.y=0}
+  requestAnimationFrame(a)
+})();
 </script>
+
 </body>
 </html>
+
+
+
